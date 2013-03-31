@@ -1,0 +1,46 @@
+#!/usr/bin/env python
+import sys,os
+from datetime import date,datetime
+
+def diff_time(old_date,new_date):
+	return (new_date-old_date).days
+
+def console_log(consumed_time):
+	return 'You have spent '+str(consumed_time)+' days'
+
+def read_file():
+	path=os.getenv('HOME')
+	filename=path+"/.birthday_date"
+	try:
+		with open(filename): 
+			f=open(filename, "r")
+			text = f.readline()
+			dates=text.split()
+			day = int(dates[0])
+			month = int(dates[1])
+			year = int(dates[2])
+			a=date(year,month,day)
+			b=date.today()
+			consumed_time = diff_time(a,b)
+			return consumed_time
+	except IOError:
+		print "File doesn't exist"
+
+if __name__=="__main__":
+	if len(sys.argv)==4:
+		try:
+			day=int(sys.argv[1])
+			month=int(sys.argv[2])
+			year=int(sys.argv[3])
+		except IOError:
+			 print "Problem reading parameters"
+		a = date(year,month,day)
+		b = date.today()
+		print console_log(diff_time(a,b))
+	elif len(sys.argv)==1:
+		print console_log(read_file())
+	else:
+		print "usage: age [<day><month><year>]"
+		print "       age reads ~/.birthday_date (without parameters)"
+
+
